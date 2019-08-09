@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="383.0" prefWidth="685.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label text="Book Manegement">
@@ -21,6 +20,7 @@
         <items>
           <Button mnemonicParsing="false" text="Filter" />
             <TextField />
+            <Button mnemonicParsing="false" text="New" />
         </items>
       </ToolBar>
       <TableView prefHeight="200.0" prefWidth="200.0">
@@ -28,9 +28,11 @@
           <TableColumn prefWidth="75.0" text="ISBN" />
           <TableColumn prefWidth="200.0" text="Nome" />
             <TableColumn prefWidth="200.0" text="Autor" />
-            <TableColumn minWidth="0.0" prefWidth="70.0" text="Preco" />
+            <TableColumn prefWidth="70.0" text="Preco" />
             <TableColumn prefWidth="70.0" text="Dt. Publicacao" />
             <TableColumn prefWidth="70.0" text="Capa" />
+            <TableColumn prefWidth="50.0" />
+            <TableColumn prefWidth="50.0" />
         </columns>
       </TableView>
    </children>

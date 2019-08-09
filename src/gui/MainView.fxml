@@ -6,8 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<ScrollPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainViewController">
    <content>
       <VBox prefHeight="341.0" prefWidth="522.0">
          <children>
@@ -15,8 +14,7 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Books">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Search" />
-                        <MenuItem mnemonicParsing="false" text="New" />
+                    <MenuItem fx:id="menuItemSearch" mnemonicParsing="false" onAction="#onMenuItemSearchAction" text="Search" />
                   </items>
                 </Menu>
               </menus>

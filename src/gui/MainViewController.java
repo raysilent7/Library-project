@@ -30,21 +30,11 @@ public class MainViewController implements Initializable {
     private MenuItem menuItemSearch;
 
     @FXML
-    private MenuItem menuItemNew;
-
-    @FXML
     public void onMenuItemSearchAction () {
         loadView("/gui/BookList.fxml", (BookListController controller) -> {
             controller.setBookService(new BookService());
             controller.updateTableView();
         });
-    }
-
-    @FXML
-    public void onMenuItemNewAction (ActionEvent event) {
-        Stage parentStage = Utils.currentStage(event);
-        Book obj = new Book();
-        createDialogForm(obj, "/gui/BookForm.fxml", parentStage);
     }
 
     @Override
@@ -69,29 +59,6 @@ public class MainViewController implements Initializable {
             initializingAction.accept(controller);
         }
         catch (IOException e) {
-            Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-    private void createDialogForm(Book obj, String absolutName, Stage parentStage) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutName));
-            Pane pane = loader.load();
-
-            BookFormController controller = loader.getController();
-            controller.setBook(obj);
-            controller.setBookService(new DepartmentService());
-            controller.subscribeDataChangeListener(this);
-            controller.updateFormData();
-
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Enter Book data");
-            dialogStage.setScene(new Scene(pane));
-            dialogStage.setResizable(false);
-            dialogStage.initOwner(parentStage);
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.showAndWait();
-        } catch (IOException e) {
             Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
         }
     }
