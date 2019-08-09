@@ -10,18 +10,18 @@ public class Book {
     private String name;
     private String autorName;
     private Double price;
-    private Date dtPublicacao;
+    private long releaseDt;
     private Path imgPath;
 
     public Book() {
     }
 
-    public Book(Integer isbn, String name, String autorName, Double price, Date dtPublicacao, Path imgPath) {
+    public Book(Integer isbn, String name, String autorName, Double price, long releaseDt, Path imgPath) {
         this.isbn = isbn;
         this.name = name;
         this.autorName = autorName;
         this.price = price;
-        this.dtPublicacao = dtPublicacao;
+        this.releaseDt = releaseDt;
         this.imgPath = imgPath;
     }
 
@@ -57,12 +57,12 @@ public class Book {
         this.price = price;
     }
 
-    public Date getDtPublicacao() {
-        return dtPublicacao;
+    public long getReleaseDt() {
+        return releaseDt;
     }
 
-    public void setDtPublicacao(Date dtPublicacao) {
-        this.dtPublicacao = dtPublicacao;
+    public void setReleaseDt(long releaseDt) {
+        this.releaseDt = releaseDt;
     }
 
     public Path getImgPath() {
@@ -95,7 +95,7 @@ public class Book {
                 ", name='" + name + '\'' +
                 ", autorName='" + autorName + '\'' +
                 ", price=" + price +
-                ", dtPublicacao=" + dtPublicacao +
+                ", releaseDt=" + releaseDt +
                 ", imgPath=" + imgPath +
                 '}';
     }
