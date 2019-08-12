@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 public class BookListController implements Initializable, DataChangeListener {
 
@@ -58,13 +59,10 @@ public class BookListController implements Initializable, DataChangeListener {
     private TableColumn<Book, Book> tableColumnRemove;
 
     @FXML
-    private Button btSearch;
+    private Button btFilter;
 
     @FXML
     private Button btNew;
-
-    @FXML
-    private TextField txtSearchField;
 
     private ObservableList<Book> obsList;
 
@@ -72,14 +70,25 @@ public class BookListController implements Initializable, DataChangeListener {
     public void onBtNewAction(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
         Book obj = new Book();
-        createDialogForm(obj, "/gui/BookForm.fxml", parentStage);
+        createDialogForm(obj, "/gui/BookForm.fxml", parentStage, (BookFormController controller) -> {
+            controller.setBook(obj);
+            controller.setBookService(new BookService());
+            controller.subscribeDataChangeListener(this);
+            controller.updateFormData();
+        });
     }
 
     @FXML
-    public void onBtSearchAction(ActionEvent event) {
+    public void onBtFilterAction(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
         Book obj = new Book();
-        createDialogForm(obj, "/gui/BookForm.fxml", parentStage);
+
+        createDialogForm(obj, "/gui/BookFilter.fxml", parentStage, (BookFilterController controller) -> {
+            controller.setBook(obj);
+            controller.setBookService(new BookService());
+            controller.subscribeDataChangeListener(this);
+            controller.updateFormData();
+        });
     }
 
     public void setBookService (BookService service) {
@@ -101,30 +110,27 @@ public class BookListController implements Initializable, DataChangeListener {
     }
 
     private void initializeNodes() {
-        tableColumnIsbn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tableColumnIsbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tableColumnAutor.setCellValueFactory(new PropertyValueFactory<>("autor"));
+        tableColumnAutor.setCellValueFactory(new PropertyValueFactory<>("autorName"));
         tableColumnPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-        tableColumnReleaseDt.setCellValueFactory(new PropertyValueFactory<>("release dt."));
-        tableColumnImgPath.setCellValueFactory(new PropertyValueFactory<>("img path"));
+        tableColumnReleaseDt.setCellValueFactory(new PropertyValueFactory<>("releaseDt"));
+        tableColumnImgPath.setCellValueFactory(new PropertyValueFactory<>("imgPath"));
 
         Stage stage = (Stage) Main.getMainScene().getWindow();
         tableViewBook.prefHeightProperty().bind(stage.heightProperty());
     }
 
-    private void createDialogForm(Book obj, String absolutName, Stage parentStage) {
+    private <T> void createDialogForm(Book obj, String absolutName, Stage parentStage, Consumer<T> initializingAction) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutName));
             Pane pane = loader.load();
 
-            BookFormController controller = loader.getController();
-            controller.setBook(obj);
-            controller.setBookService(new BookService());
-            controller.subscribeDataChangeListener(this);
-            controller.updateFormData();
+            T controller = loader.getController();
+            initializingAction.accept(controller);
 
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Enter Book data");
+            dialogStage.setTitle("Enter data");
             dialogStage.setScene(new Scene(pane));
             dialogStage.setResizable(false);
             dialogStage.initOwner(parentStage);

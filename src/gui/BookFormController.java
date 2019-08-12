@@ -93,14 +93,12 @@ public class BookFormController implements Initializable {
         if (entity == null) {
             throw new IllegalStateException("Entity was null");
         }
-
-        //falta arrumar um jeito de converter a data
         txtIsbn.setText(String.valueOf(entity.getIsbn()));
         txtName.setText(entity.getName());
         txtAutor.setText(entity.getAutorName());
         txtPrice.setText(String.valueOf(entity.getPrice()));
-        txtReleaseDt.setText(String.valueOf(entity.getName()));
-        txtImgPath.setText(String.valueOf(entity.getName()));
+        txtReleaseDt.setText(String.valueOf(entity.getReleaseDt()));
+        txtImgPath.setText(String.valueOf(entity.getImgPath()));
     }
 
     private Book getFormData() {
@@ -111,7 +109,7 @@ public class BookFormController implements Initializable {
         obj.setName(txtName.getText());
         obj.setAutorName(txtAutor.getText());
         obj.setPrice(Utils.tryParseToDouble(txtName.getText()));
-        obj.setReleaseDt(Date.parse(txtName.getText()));
+        obj.setReleaseDt(java.sql.Date.valueOf(txtName.getText()));
         obj.setName(txtName.getText());
 
         return obj;

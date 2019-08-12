@@ -1,7 +1,7 @@
 package entities;
 
 import java.nio.file.Path;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
 
 public class Book {
@@ -10,13 +10,13 @@ public class Book {
     private String name;
     private String autorName;
     private Double price;
-    private long releaseDt;
+    private Date releaseDt;
     private Path imgPath;
 
     public Book() {
     }
 
-    public Book(Integer isbn, String name, String autorName, Double price, long releaseDt, Path imgPath) {
+    public Book(Integer isbn, String name, String autorName, Double price, Date releaseDt, Path imgPath) {
         this.isbn = isbn;
         this.name = name;
         this.autorName = autorName;
@@ -57,11 +57,11 @@ public class Book {
         this.price = price;
     }
 
-    public long getReleaseDt() {
+    public Date getReleaseDt() {
         return releaseDt;
     }
 
-    public void setReleaseDt(long releaseDt) {
+    public void setReleaseDt(Date releaseDt) {
         this.releaseDt = releaseDt;
     }
 

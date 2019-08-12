@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="276.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="276.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BookFormController">
    <children>
       <GridPane layoutX="14.0" layoutY="16.0" prefHeight="179.0" prefWidth="585.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="16.0">
         <columnConstraints>
@@ -31,13 +31,13 @@
             <Label text="Price" GridPane.rowIndex="3" />
             <Label text="Release Date" GridPane.rowIndex="4" />
             <Label text="Img Path (cape)" GridPane.rowIndex="5" />
-            <TextField GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField promptText="dd/MM/yyyy" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField promptText="Ex.: C:/Documents/Book.jpg" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Label GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <TextField fx:id="txtIsbn" GridPane.columnIndex="1" />
+            <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="txtAutor" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="txtPrice" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="txtReleaseDt" promptText="dd/MM/yyyy" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="txtImgPath" promptText="Ex.: C:/Documents/Book.jpg" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label fx:id="labelErrorName" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <Label GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Label GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Label GridPane.columnIndex="2" GridPane.rowIndex="2" />
@@ -45,7 +45,7 @@
             <Label GridPane.columnIndex="2" />
          </children>
       </GridPane>
-      <Button layoutX="50.0" layoutY="212.0" mnemonicParsing="false" text="Save" />
-      <Button layoutX="122.0" layoutY="212.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="btSave" layoutX="50.0" layoutY="212.0" mnemonicParsing="false" onAction="#onBtSaveAction" text="Save" />
+      <Button fx:id="btCancel" layoutX="122.0" layoutY="212.0" mnemonicParsing="false" onAction="#onBtCancelAction" text="Cancel" />
    </children>
 </AnchorPane>
