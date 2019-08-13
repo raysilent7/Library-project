@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Book {
 
-    private Integer isbn;
+    private Integer isbn = null;
     private String name;
     private String autorName;
     private Double price;

@@ -11,8 +11,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.util.Callback;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import services.BookService;
 
 import java.net.URL;
@@ -105,20 +107,6 @@ public class BookFilterController implements Initializable {
         }
 
         txtFilterField.setText(String.valueOf(entity.getIsbn()));
-
-        /*if (filterOptionsComboBox.getValue().equals("Isbn")) {
-            txtFilterField.setText(String.valueOf(entity.getIsbn()));
-        } else if (filterOptionsComboBox.getValue().equals("Name")) {
-            txtFilterField.setText(entity.getName());
-        } else if (filterOptionsComboBox.getValue().equals("Autor")) {
-            txtFilterField.setText(entity.getAutorName());
-        } else if (filterOptionsComboBox.getValue().equals("Price")) {
-            txtFilterField.setText(String.valueOf(entity.getPrice()));
-        } else if (filterOptionsComboBox.getValue().equals("Release Date")) {
-            txtFilterField.setText(String.valueOf(entity.getReleaseDt()));
-        }else if (filterOptionsComboBox.getValue().equals("Image")) {
-            txtFilterField.setText(String.valueOf(entity.getImgPath()));
-        }*/
     }
 
     private Book getFormData() {

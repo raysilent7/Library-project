@@ -4,8 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
-import java.text.ParseException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Utils {
 
@@ -38,5 +39,11 @@ public class Utils {
         else {
             return null;
         }
+    }
+
+    private static String formatData(Date data) {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String newDate = dateFormat.format(data);
+        return newDate;
     }
 }

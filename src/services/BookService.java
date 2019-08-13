@@ -2,6 +2,7 @@ package services;
 
 import dao.BookDao;
 import dao.DaoFactory;
+import db.DbIntegrityException;
 import entities.Book;
 
 import java.util.List;
@@ -20,12 +21,12 @@ public class BookService {
         return dao.findByAny(obj);
     }
 
-    public void saveOrUpdate (Book obj) {
+    public void save (Book obj) {
         if (obj.getIsbn() == null) {
-            dao.insert(obj);
+            throw new DbIntegrityException("ISBN can't be null");
         }
         else {
-            dao.update(obj);
+            dao.insert(obj);
         }
     }
 

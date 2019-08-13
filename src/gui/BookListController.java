@@ -70,7 +70,7 @@ public class BookListController implements Initializable, DataChangeListener {
     public void onBtNewAction(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
         Book obj = new Book();
-        createDialogForm(obj, "/gui/BookForm.fxml", parentStage, (BookFormController controller) -> {
+        createDialogForm("/gui/BookForm.fxml", parentStage, (BookFormController controller) -> {
             controller.setBook(obj);
             controller.setBookService(new BookService());
             controller.subscribeDataChangeListener(this);
@@ -83,7 +83,7 @@ public class BookListController implements Initializable, DataChangeListener {
         Stage parentStage = Utils.currentStage(event);
         Book obj = new Book();
 
-        createDialogForm(obj, "/gui/BookFilter.fxml", parentStage, (BookFilterController controller) -> {
+        createDialogForm("/gui/BookFilter.fxml", parentStage, (BookFilterController controller) -> {
             controller.setBook(obj);
             controller.setBookService(new BookService());
             controller.subscribeDataChangeListener(this);
@@ -121,7 +121,7 @@ public class BookListController implements Initializable, DataChangeListener {
         tableViewBook.prefHeightProperty().bind(stage.heightProperty());
     }
 
-    private <T> void createDialogForm(Book obj, String absolutName, Stage parentStage, Consumer<T> initializingAction) {
+    private <T> void createDialogForm(String absolutName, Stage parentStage, Consumer<T> initializingAction) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutName));
             Pane pane = loader.load();

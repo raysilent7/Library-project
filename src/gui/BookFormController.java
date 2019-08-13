@@ -16,6 +16,10 @@ import javafx.scene.control.TextField;
 import services.BookService;
 
 import java.net.URL;
+import java.nio.file.Path;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class BookFormController implements Initializable {
@@ -63,7 +67,7 @@ public class BookFormController implements Initializable {
     public void onBtSaveAction (ActionEvent event) {
         try {
             entity = getFormData();
-            service.saveOrUpdate(entity);
+            service.save(entity);
             notifyDataChangeListeners();
             Utils.currentStage(event).close();
         }
@@ -108,9 +112,9 @@ public class BookFormController implements Initializable {
         obj.setIsbn(Utils.tryParseToInt(txtIsbn.getText()));
         obj.setName(txtName.getText());
         obj.setAutorName(txtAutor.getText());
-        obj.setPrice(Utils.tryParseToDouble(txtName.getText()));
-        obj.setReleaseDt(java.sql.Date.valueOf(txtName.getText()));
-        obj.setName(txtName.getText());
+        obj.setPrice(Utils.tryParseToDouble(txtPrice.getText()));
+        obj.setReleaseDt(Date.valueOf(txtReleaseDt.getText()));
+        obj.setImgPath(Path.of(txtImgPath.getText()));
 
         return obj;
     }
