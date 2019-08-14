@@ -12,7 +12,7 @@ public class Book {
     private String autorName;
     private Double price = 0.0;
     private Date releaseDt = new Date(0L);
-    private Path imgPath;
+    private Path imgPath = Path.of("/hh");
 
     public Book() {
     }

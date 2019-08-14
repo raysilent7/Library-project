@@ -24,7 +24,8 @@ import services.BookService;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.Date;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -135,6 +136,26 @@ public class BookListController implements Initializable, DataChangeListener {
         tableColumnPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         tableColumnReleaseDt.setCellValueFactory(new PropertyValueFactory<>("releaseDt"));
         tableColumnImgPath.setCellValueFactory(new PropertyValueFactory<>("imgPath"));
+
+        tableColumnReleaseDt.setCellFactory(column -> {
+            TableCell<Book, Date> cell = new TableCell<Book, Date>() {
+                private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+                @Override
+                protected void updateItem(Date item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if(empty) {
+                        setText(null);
+                    }
+                    else {
+                        this.setText(format.format(item));
+
+                    }
+                }
+            };
+
+            return cell;
+        });
 
         Stage stage = (Stage) Main.getMainScene().getWindow();
         tableViewBook.prefHeightProperty().bind(stage.heightProperty());

@@ -92,7 +92,7 @@ public class BookFilterController implements Initializable {
         if (entity == null) {
             throw new IllegalStateException("Entity was null");
         }
-        txtFilterField.setText(null);
+        txtFilterField.setText("");
     }
 
     private Book getFormData() {
@@ -118,8 +118,9 @@ public class BookFilterController implements Initializable {
             obj.setPrice(Utils.tryParseToDouble(txtFilterField.getText()));
             return obj;
         } else if (filterOptionsComboBox.getValue().equals("Release Date")) {
-            obj.setReleaseDt(Date.valueOf(txtFilterField.getText()));
-            return obj;
+            obj.setReleaseDt(new Date(Date.parse(txtFilterField.getText())));
+            //return obj;
+            System.out.println(obj);
         }else if (filterOptionsComboBox.getValue().equals("Image")) {
             obj.setName(txtFilterField.getText());
             return obj;

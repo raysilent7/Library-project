@@ -29,7 +29,7 @@ public class BookDaoJdbc implements BookDao {
             st.setString(2, book.getName());
             st.setString(3, book.getAutorName());
             st.setDouble(4, book.getPrice());
-            st.setTimestamp(5, new Timestamp(book.getReleaseDt().getTime()));
+            st.setDate(5, book.getReleaseDt());
             st.setString(6, String.valueOf(book.getImgPath()));
 
             int rowsAffected = st.executeUpdate();
@@ -57,7 +57,6 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public void update (Book book) {
         PreparedStatement st = null;
-        Timestamp timestamp = null;
         try {
             st = conn.prepareStatement("UPDATE book SET Isbn = ?, " +
                     "Name = ?, Autor = ?, Price = ?, ReleaseDate = ?, " +
@@ -66,7 +65,7 @@ public class BookDaoJdbc implements BookDao {
             st.setString(2, book.getName());
             st.setString(3, book.getAutorName());
             st.setDouble(4, book.getPrice());
-            st.setTimestamp(5, new Timestamp(book.getReleaseDt().getTime()));
+            st.setDate(5, book.getReleaseDt());
             st.setString(6, String.valueOf(book.getImgPath()));
             st.setInt(7, book.getId());
 
@@ -133,7 +132,7 @@ public class BookDaoJdbc implements BookDao {
             st.setString(3, book.getName());
             st.setString(4, book.getAutorName());
             st.setDouble(5, book.getPrice());
-            st.setTimestamp(6, new Timestamp(book.getReleaseDt().getTime()));
+            st.setDate(6, book.getReleaseDt());
             st.setString(7, String.valueOf(book.getImgPath()));
 
             rs = st.executeQuery();

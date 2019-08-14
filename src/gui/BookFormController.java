@@ -5,6 +5,7 @@ import entities.Book;
 import exceptions.ValidationException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
+import gui.util.Constraints;
 import gui.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,12 +19,16 @@ import services.BookService;
 import java.net.URL;
 import java.nio.file.Path;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class BookFormController implements Initializable {
 
     private Book entity;
     private BookService service;
+    private DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
     @FXML
@@ -78,6 +83,9 @@ public class BookFormController implements Initializable {
         catch (ValidationException e) {
             setErrorMessages(e.getErrors());
         }
+        catch (ParseException e) {
+            Alerts.showAlert("Error saving object", null, e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
@@ -87,7 +95,7 @@ public class BookFormController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        initializeNodes();
     }
 
     public void subscribeDataChangeListener (DataChangeListener listener) {
@@ -103,21 +111,34 @@ public class BookFormController implements Initializable {
         txtName.setText(entity.getName());
         txtAutor.setText(entity.getAutorName());
         txtPrice.setText(String.valueOf(entity.getPrice()));
-        txtReleaseDt.setText(String.valueOf(entity.getReleaseDt()));
+        txtReleaseDt.setText(sdf.format(entity.getReleaseDt()));
         txtImgPath.setText(String.valueOf(entity.getImgPath()));
     }
 
-    private Book getFormData() {
+    private Book getFormData() throws ParseException {
         Book obj = new Book ();
+        ValidationException exception = new ValidationException("Validation error");
 
-        //Falta validacao de dados (nome, autor, data e path)
         obj.setId(Utils.tryParseToInt(txtId.getText()));
         obj.setIsbn(Utils.tryParseToInt(txtIsbn.getText()));
+
+        if (txtName.getText() == null || txtName.getText().trim().equals("")) {
+            exception.addError("Name", "Field can't be empty");
+        }
         obj.setName(txtName.getText());
+
+        if (txtAutor.getText() == null || txtAutor.getText().trim().equals("")) {
+            exception.addError("Autor", "Field can't be empty");
+        }
         obj.setAutorName(txtAutor.getText());
+
         obj.setPrice(Utils.tryParseToDouble(txtPrice.getText()));
-        obj.setReleaseDt(Date.valueOf(txtReleaseDt.getText()));
+        obj.setReleaseDt(new Date(Date.parse(txtReleaseDt.getText())));
         obj.setImgPath(Path.of(txtImgPath.getText()));
+
+        if (exception.getErrors().size() > 0) {
+            throw exception;
+        }
 
         return obj;
     }
@@ -126,6 +147,16 @@ public class BookFormController implements Initializable {
         for (DataChangeListener listener : dataChangeListeners) {
             listener.onDataChanged();
         }
+    }
+
+    private void initializeNodes () {
+        Constraints.setTextFieldInteger(txtId);
+        Constraints.setTextFieldInteger(txtIsbn);
+        Constraints.setTextFieldMaxLength(txtIsbn, 6);
+        Constraints.setTextFieldMaxLength(txtName, 40);
+        Constraints.setTextFieldMaxLength(txtAutor, 30);
+        Constraints.setTextFieldDouble(txtPrice);
+        Constraints.setTextFieldMaxLength(txtImgPath, 60);
     }
 
     private void setErrorMessages (Map<String, String> errors) {
