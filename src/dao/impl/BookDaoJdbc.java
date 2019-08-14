@@ -126,14 +126,15 @@ public class BookDaoJdbc implements BookDao {
         try {
             st = conn.prepareStatement("SELECT * " +
                     "FROM book " +
-                    "WHERE Isbn = ? or Name = ? or Autor = ? or Price = ? or ReleaseDate = ? or ImgPath = ? " +
+                    "WHERE Id = ? or Isbn = ? or Name = ? or Autor = ? or Price = ? or ReleaseDate = ? or ImgPath = ? " +
                     "ORDER BY id");
-            st.setInt(1, book.getIsbn());
-            st.setString(2, book.getName());
-            st.setString(3, book.getAutorName());
-            st.setDouble(4, book.getPrice());
-            st.setTimestamp(5, new Timestamp(book.getReleaseDt().getTime()));
-            st.setString(6, String.valueOf(book.getImgPath()));
+            st.setInt(1, book.getId());
+            st.setInt(2, book.getIsbn());
+            st.setString(3, book.getName());
+            st.setString(4, book.getAutorName());
+            st.setDouble(5, book.getPrice());
+            st.setTimestamp(6, new Timestamp(book.getReleaseDt().getTime()));
+            st.setString(7, String.valueOf(book.getImgPath()));
 
             rs = st.executeQuery();
 

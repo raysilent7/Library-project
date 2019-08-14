@@ -25,10 +25,9 @@ import java.util.ResourceBundle;
 
 public class BookFilterController implements Initializable {
 
-    private String selectedItem;
     private Book entity;
     private BookService service;
-    private BookListController bookList;
+    private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
     @FXML
     private Button btFilter;
@@ -52,22 +51,21 @@ public class BookFilterController implements Initializable {
         this.service = service;
     }
 
-    public void setBookList (BookListController bookList) {
-        this.bookList = bookList;
-    }
-
     @FXML
     public void onBtFilterAction (ActionEvent event) {
         try {
-            bookList.setBookService(new BookService());
             entity = getFormData();
-            bookList.onFilterSearch(entity);
+            notifyDataChangeListeners(entity);
             Utils.currentStage(event).close();
         }
         catch (DbException e) {
             Alerts.showAlert("Error finding object", null, e.getMessage(), Alert.AlertType.ERROR);
         }
         Utils.currentStage(event).close();
+    }
+
+    public void subscribeDataChangeListener (DataChangeListener listener) {
+        dataChangeListeners.add(listener);
     }
 
     @FXML
@@ -104,41 +102,35 @@ public class BookFilterController implements Initializable {
 
         filterOptionsComboBox.setOnAction(event);
 
-        if (filterOptionsComboBox.getValue().equals("Isbn")) {
+        if (filterOptionsComboBox.getValue().equals("Id")) {
+            obj.setId(Utils.tryParseToInt(txtFilterField.getText()));
+            return obj;
+        } else if (filterOptionsComboBox.getValue().equals("Isbn")) {
             obj.setIsbn(Utils.tryParseToInt(txtFilterField.getText()));
-            obj.setPrice(0.0);
-            obj.setReleaseDt(new Date(0L));
             return obj;
         } else if (filterOptionsComboBox.getValue().equals("Name")) {
             obj.setName(txtFilterField.getText());
-            obj.setIsbn(0);
-            obj.setPrice(0.0);
-            obj.setReleaseDt(new Date(0L));
             return obj;
         } else if (filterOptionsComboBox.getValue().equals("Autor")) {
             obj.setAutorName(txtFilterField.getText());
-            obj.setIsbn(0);
-            obj.setPrice(0.0);
-            obj.setReleaseDt(new Date(0L));
             return obj;
         } else if (filterOptionsComboBox.getValue().equals("Price")) {
             obj.setPrice(Utils.tryParseToDouble(txtFilterField.getText()));
-            obj.setIsbn(0);
-            obj.setReleaseDt(new Date(0L));
             return obj;
         } else if (filterOptionsComboBox.getValue().equals("Release Date")) {
             obj.setReleaseDt(Date.valueOf(txtFilterField.getText()));
-            obj.setIsbn(0);
-            obj.setPrice(0.0);
             return obj;
         }else if (filterOptionsComboBox.getValue().equals("Image")) {
             obj.setName(txtFilterField.getText());
-            obj.setIsbn(0);
-            obj.setPrice(0.0);
-            obj.setReleaseDt(new Date(0L));
             return obj;
         }
 
         return null;
+    }
+
+    private void notifyDataChangeListeners(Book obj) {
+        for (DataChangeListener listener : dataChangeListeners) {
+            listener.onDataFilter(obj);
+        }
     }
 }

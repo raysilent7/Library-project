@@ -22,7 +22,7 @@ public class BookService {
     }
 
     public void saveOrUpdate (Book obj) {
-        if (obj.getId() == null) {
+        if (obj.getId() == 0) {
             dao.insert(obj);
         }
         else {

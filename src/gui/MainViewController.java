@@ -1,7 +1,10 @@
 package gui;
 
 import application.Main;
+import entities.Book;
 import gui.util.Alerts;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,10 +18,14 @@ import services.BookService;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 public class MainViewController implements Initializable {
+
+    private ObservableList<Book> obsList;
+    private BookService service = new BookService();
 
     @FXML
     private MenuItem menuItemSearch;
@@ -27,7 +34,9 @@ public class MainViewController implements Initializable {
     public void onMenuItemSearchAction () {
         loadView("/gui/BookList.fxml", (BookListController controller) -> {
             controller.setBookService(new BookService());
-            controller.updateTableView();
+            List<Book> list = service.findAll();
+            obsList = FXCollections.observableArrayList(list);
+            controller.updateTableView(obsList);
         });
     }
 

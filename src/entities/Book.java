@@ -6,12 +6,12 @@ import java.util.Objects;
 
 public class Book {
 
-    private Integer id;
-    private Integer isbn;
+    private Integer id = 0;
+    private Integer isbn = 0;
     private String name;
     private String autorName;
-    private Double price;
-    private Date releaseDt;
+    private Double price = 0.0;
+    private Date releaseDt = new Date(0L);
     private Path imgPath;
 
     public Book() {

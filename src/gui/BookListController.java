@@ -92,7 +92,7 @@ public class BookListController implements Initializable, DataChangeListener {
         createDialogForm("/gui/BookFilter.fxml", parentStage, (BookFilterController controller) -> {
             controller.setBook (obj);
             controller.setBookService (new BookService());
-            controller.setBookList (new BookListController());
+            controller.subscribeDataChangeListener(this);
             controller.updateFormData();
         });
     }
@@ -101,23 +101,8 @@ public class BookListController implements Initializable, DataChangeListener {
         this.service = service;
     }
 
-    public void updateTableView() {
-        if (service == null) {
-            throw new IllegalStateException("Service was null");
-        }
-        List<Book> list = service.findAll();
-        obsList = FXCollections.observableArrayList(list);
-        tableViewBook.setItems(obsList);
-        initEditButtons();
-        initRemoveButtons();
-    }
-
-    public void onFilterSearch(Book obj) {
-        if (service == null) {
-            throw new IllegalStateException("Service was null");
-        }
-        List<Book> list = service.findByAny(obj);
-        obsList = FXCollections.observableArrayList(list);
+    public void updateTableView(ObservableList<Book> obj) {
+        obsList = obj;
         tableViewBook.setItems(obsList);
         initEditButtons();
         initRemoveButtons();
@@ -130,7 +115,16 @@ public class BookListController implements Initializable, DataChangeListener {
 
     @Override
     public void onDataChanged() {
-        updateTableView();
+        List<Book> list = service.findAll();
+        obsList = FXCollections.observableArrayList(list);
+        updateTableView(obsList);
+    }
+
+    @Override
+    public void onDataFilter(Book obj) {
+        List<Book> list = service.findByAny(obj);
+        obsList = FXCollections.observableArrayList(list);
+        updateTableView(obsList);
     }
 
     private void initializeNodes() {
@@ -216,7 +210,9 @@ public class BookListController implements Initializable, DataChangeListener {
             }
             try {
                 service.remove(obj);
-                updateTableView();
+                List<Book> list = service.findAll();
+                obsList = FXCollections.observableArrayList(list);
+                updateTableView(obsList);
             }
             catch (DbIntegrityException e) {
                 Alerts.showAlert("Error removing object", null, e.getMessage(), Alert.AlertType.ERROR);
