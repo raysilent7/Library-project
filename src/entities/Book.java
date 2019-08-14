@@ -6,7 +6,8 @@ import java.util.Objects;
 
 public class Book {
 
-    private Integer isbn = null;
+    private Integer id;
+    private Integer isbn;
     private String name;
     private String autorName;
     private Double price;
@@ -16,13 +17,22 @@ public class Book {
     public Book() {
     }
 
-    public Book(Integer isbn, String name, String autorName, Double price, Date releaseDt, Path imgPath) {
+    public Book(Integer id, Integer isbn, String name, String autorName, Double price, Date releaseDt, Path imgPath) {
+        this.id = id;
         this.isbn = isbn;
         this.name = name;
         this.autorName = autorName;
         this.price = price;
         this.releaseDt = releaseDt;
         this.imgPath = imgPath;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getIsbn() {

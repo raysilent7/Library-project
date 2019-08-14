@@ -61,14 +61,14 @@ public class BookDaoJdbc implements BookDao {
         try {
             st = conn.prepareStatement("UPDATE book SET Isbn = ?, " +
                     "Name = ?, Autor = ?, Price = ?, ReleaseDate = ?, " +
-                    "ImgPath = ? where Isbn = ?");
-            st.setInt(7, book.getIsbn());
+                    "ImgPath = ? where Id = ?");
             st.setInt(1, book.getIsbn());
             st.setString(2, book.getName());
             st.setString(3, book.getAutorName());
             st.setDouble(4, book.getPrice());
             st.setTimestamp(5, new Timestamp(book.getReleaseDt().getTime()));
             st.setString(6, String.valueOf(book.getImgPath()));
+            st.setInt(7, book.getId());
 
             st.executeUpdate();
         }
@@ -81,11 +81,11 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public void deleteByIsbn (Integer isbn) {
+    public void deleteById (Integer id) {
         PreparedStatement st = null;
         try {
-            st = conn.prepareStatement("DELETE FROM book WHERE Isbn = ?");
-            st.setInt(1, isbn);
+            st = conn.prepareStatement("DELETE FROM book WHERE Id = ?");
+            st.setInt(1, id);
             st.executeUpdate();
         }
         catch (SQLException e) {
@@ -97,12 +97,12 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public Book findByIsbn (Integer isbn) {
+    public Book findById (Integer id) {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            st = conn.prepareStatement("SELECT * FROM book WHERE Isbn = ?");
-            st.setInt(1, isbn);
+            st = conn.prepareStatement("SELECT * FROM book WHERE id = ?");
+            st.setInt(1, id);
             rs = st.executeQuery();
             if (rs.next()) {
                 Book book = instantiateBook(rs);
@@ -127,7 +127,7 @@ public class BookDaoJdbc implements BookDao {
             st = conn.prepareStatement("SELECT * " +
                     "FROM book " +
                     "WHERE Isbn = ? or Name = ? or Autor = ? or Price = ? or ReleaseDate = ? or ImgPath = ? " +
-                    "ORDER BY Isbn");
+                    "ORDER BY id");
             st.setInt(1, book.getIsbn());
             st.setString(2, book.getName());
             st.setString(3, book.getAutorName());
@@ -160,7 +160,7 @@ public class BookDaoJdbc implements BookDao {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            st = conn.prepareStatement("SELECT * FROM book ORDER BY Isbn");
+            st = conn.prepareStatement("SELECT * FROM book ORDER BY id");
 
             rs = st.executeQuery();
 
@@ -184,6 +184,7 @@ public class BookDaoJdbc implements BookDao {
 
     private Book instantiateBook (ResultSet rs) throws SQLException {
         Book book = new Book();
+        book.setId(rs.getInt("Id"));
         book.setIsbn(rs.getInt("Isbn"));
         book.setName(rs.getString("Name"));
         book.setAutorName(rs.getString("Autor"));

@@ -23,14 +23,15 @@
       </ToolBar>
       <TableView fx:id="tableViewBook" prefHeight="200.0" prefWidth="200.0">
         <columns>
+            <TableColumn fx:id="tableColumnEdit" prefWidth="30.0" />
+            <TableColumn fx:id="tableColumnRemove" prefWidth="30.0" />
+            <TableColumn fx:id="tableColumnId" prefWidth="60.0" text="Id" />
           <TableColumn fx:id="tableColumnIsbn" prefWidth="75.0" text="ISBN" />
-          <TableColumn fx:id="tableColumnName" prefWidth="200.0" text="Name" />
-            <TableColumn fx:id="tableColumnAutor" prefWidth="200.0" text="Autor" />
+          <TableColumn fx:id="tableColumnName" prefWidth="150.0" text="Name" />
+            <TableColumn fx:id="tableColumnAutor" prefWidth="150.0" text="Autor" />
             <TableColumn fx:id="tableColumnPrice" prefWidth="70.0" text="Price" />
-            <TableColumn fx:id="tableColumnReleaseDt" prefWidth="70.0" text="Release Dt." />
+            <TableColumn fx:id="tableColumnReleaseDt" prefWidth="90.0" text="Release Dt." />
             <TableColumn fx:id="tableColumnImgPath" prefWidth="70.0" text="Cape" />
-            <TableColumn fx:id="tableColumnEdit" prefWidth="50.0" />
-            <TableColumn fx:id="tableColumnRemove" prefWidth="50.0" />
         </columns>
       </TableView>
    </children>

@@ -1,10 +1,12 @@
 package gui;
 
 import application.Main;
+import db.DbIntegrityException;
 import entities.Book;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,6 +26,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
@@ -33,6 +36,9 @@ public class BookListController implements Initializable, DataChangeListener {
 
     @FXML
     private TableView<Book> tableViewBook;
+
+    @FXML
+    private TableColumn<Book, Integer> tableColumnId;
 
     @FXML
     private TableColumn<Book, Integer> tableColumnIsbn;
@@ -84,9 +90,9 @@ public class BookListController implements Initializable, DataChangeListener {
         Book obj = new Book();
 
         createDialogForm("/gui/BookFilter.fxml", parentStage, (BookFilterController controller) -> {
-            controller.setBook(obj);
-            controller.setBookService(new BookService());
-            controller.subscribeDataChangeListener(this);
+            controller.setBook (obj);
+            controller.setBookService (new BookService());
+            controller.setBookList (new BookListController());
             controller.updateFormData();
         });
     }
@@ -102,6 +108,19 @@ public class BookListController implements Initializable, DataChangeListener {
         List<Book> list = service.findAll();
         obsList = FXCollections.observableArrayList(list);
         tableViewBook.setItems(obsList);
+        initEditButtons();
+        initRemoveButtons();
+    }
+
+    public void onFilterSearch(Book obj) {
+        if (service == null) {
+            throw new IllegalStateException("Service was null");
+        }
+        List<Book> list = service.findByAny(obj);
+        obsList = FXCollections.observableArrayList(list);
+        tableViewBook.setItems(obsList);
+        initEditButtons();
+        initRemoveButtons();
     }
 
     @Override
@@ -109,7 +128,13 @@ public class BookListController implements Initializable, DataChangeListener {
         initializeNodes();
     }
 
+    @Override
+    public void onDataChanged() {
+        updateTableView();
+    }
+
     private void initializeNodes() {
+        tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tableColumnIsbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableColumnAutor.setCellValueFactory(new PropertyValueFactory<>("autorName"));
@@ -141,8 +166,61 @@ public class BookListController implements Initializable, DataChangeListener {
         }
     }
 
-    @Override
-    public void onDataChanged() {
-        updateTableView();
+    private void initEditButtons() {
+        tableColumnEdit.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        tableColumnEdit.setCellFactory(param -> new TableCell<Book, Book>() {
+            private final Button button = new Button("E");
+
+            @Override
+            protected void updateItem(Book obj, boolean empty) {
+                super.updateItem(obj, empty);
+                if (obj == null) {
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(button);
+                button.setOnAction(
+                        event -> createDialogForm("/gui/BookForm.fxml", Utils.currentStage(event), (BookFormController controller) -> {
+                            controller.setBook(obj);
+                            controller.setBookService(new BookService());
+                            controller.subscribeDataChangeListener(BookListController.this);
+                            controller.updateFormData();
+                        }));
+            }
+        });
+    }
+
+    private void initRemoveButtons() {
+        tableColumnRemove.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        tableColumnRemove.setCellFactory(param -> new TableCell<Book, Book>() {
+            private final Button button = new Button("X");
+            @Override
+            protected void updateItem(Book obj, boolean empty) {
+                super.updateItem(obj, empty);
+                if (obj == null) {
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(button);
+                button.setOnAction(event -> removeEntity(obj));
+            }
+        });
+    }
+
+    private void removeEntity(Book obj) {
+        Optional<ButtonType> result =  Alerts.showConfirmation("Confirmation", "Are you sure to delete?");
+
+        if (result.get() == ButtonType.OK) {
+            if (service == null) {
+                throw new IllegalStateException("Service was null");
+            }
+            try {
+                service.remove(obj);
+                updateTableView();
+            }
+            catch (DbIntegrityException e) {
+                Alerts.showAlert("Error removing object", null, e.getMessage(), Alert.AlertType.ERROR);
+            }
+        }
     }
 }

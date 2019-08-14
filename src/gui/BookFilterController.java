@@ -25,10 +25,10 @@ import java.util.ResourceBundle;
 
 public class BookFilterController implements Initializable {
 
-    private String filterOption;
+    private String selectedItem;
     private Book entity;
     private BookService service;
-    private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
+    private BookListController bookList;
 
     @FXML
     private Button btFilter;
@@ -48,22 +48,20 @@ public class BookFilterController implements Initializable {
         this.entity = entity;
     }
 
-    public void setBookService(BookService service) {
+    public void setBookService (BookService service) {
         this.service = service;
+    }
+
+    public void setBookList (BookListController bookList) {
+        this.bookList = bookList;
     }
 
     @FXML
     public void onBtFilterAction (ActionEvent event) {
         try {
-            filterOptionsComboBox.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event2) {
-                    filterOption = filterOptionsComboBox.getSelectionModel().getSelectedItem();
-                }
-            });
+            bookList.setBookService(new BookService());
             entity = getFormData();
-            service.findByAny(entity);
-            notifyDataChangeListeners();
+            bookList.onFilterSearch(entity);
             Utils.currentStage(event).close();
         }
         catch (DbException e) {
@@ -80,6 +78,7 @@ public class BookFilterController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         List<String> list = new ArrayList<>();
+        list.add("Id");
         list.add("Isbn");
         list.add("Name");
         list.add("Autor");
@@ -91,41 +90,55 @@ public class BookFilterController implements Initializable {
         filterOptionsComboBox.setItems(obsList);
     }
 
-    public void subscribeDataChangeListener (DataChangeListener listener) {
-        dataChangeListeners.add(listener);
-    }
-
-    private void notifyDataChangeListeners() {
-        for (DataChangeListener listener : dataChangeListeners) {
-            listener.onDataChanged();
-        }
-    }
-
     public void updateFormData () {
         if (entity == null) {
             throw new IllegalStateException("Entity was null");
         }
-
-        txtFilterField.setText(String.valueOf(entity.getIsbn()));
+        txtFilterField.setText(null);
     }
 
     private Book getFormData() {
         Book obj = new Book ();
 
-        if (filterOption.equals("Isbn")) {
+        EventHandler<ActionEvent> event = e -> filterOptionsComboBox.getValue();
+
+        filterOptionsComboBox.setOnAction(event);
+
+        if (filterOptionsComboBox.getValue().equals("Isbn")) {
             obj.setIsbn(Utils.tryParseToInt(txtFilterField.getText()));
+            obj.setPrice(0.0);
+            obj.setReleaseDt(new Date(0L));
+            return obj;
         } else if (filterOptionsComboBox.getValue().equals("Name")) {
             obj.setName(txtFilterField.getText());
+            obj.setIsbn(0);
+            obj.setPrice(0.0);
+            obj.setReleaseDt(new Date(0L));
+            return obj;
         } else if (filterOptionsComboBox.getValue().equals("Autor")) {
             obj.setAutorName(txtFilterField.getText());
+            obj.setIsbn(0);
+            obj.setPrice(0.0);
+            obj.setReleaseDt(new Date(0L));
+            return obj;
         } else if (filterOptionsComboBox.getValue().equals("Price")) {
             obj.setPrice(Utils.tryParseToDouble(txtFilterField.getText()));
+            obj.setIsbn(0);
+            obj.setReleaseDt(new Date(0L));
+            return obj;
         } else if (filterOptionsComboBox.getValue().equals("Release Date")) {
             obj.setReleaseDt(Date.valueOf(txtFilterField.getText()));
+            obj.setIsbn(0);
+            obj.setPrice(0.0);
+            return obj;
         }else if (filterOptionsComboBox.getValue().equals("Image")) {
             obj.setName(txtFilterField.getText());
+            obj.setIsbn(0);
+            obj.setPrice(0.0);
+            obj.setReleaseDt(new Date(0L));
+            return obj;
         }
 
-        return obj;
+        return null;
     }
 }

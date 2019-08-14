@@ -29,6 +29,9 @@ public class BookFormController implements Initializable {
     private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
     @FXML
+    private TextField txtId;
+
+    @FXML
     private TextField txtIsbn;
 
     @FXML
@@ -67,7 +70,7 @@ public class BookFormController implements Initializable {
     public void onBtSaveAction (ActionEvent event) {
         try {
             entity = getFormData();
-            service.save(entity);
+            service.saveOrUpdate(entity);
             notifyDataChangeListeners();
             Utils.currentStage(event).close();
         }
@@ -97,6 +100,7 @@ public class BookFormController implements Initializable {
         if (entity == null) {
             throw new IllegalStateException("Entity was null");
         }
+        txtId.setText(String.valueOf(entity.getId()));
         txtIsbn.setText(String.valueOf(entity.getIsbn()));
         txtName.setText(entity.getName());
         txtAutor.setText(entity.getAutorName());
@@ -109,6 +113,7 @@ public class BookFormController implements Initializable {
         Book obj = new Book ();
 
         //Falta validacao de dados (nome, autor, data e path)
+        obj.setId(Utils.tryParseToInt(txtId.getText()));
         obj.setIsbn(Utils.tryParseToInt(txtIsbn.getText()));
         obj.setName(txtName.getText());
         obj.setAutorName(txtAutor.getText());

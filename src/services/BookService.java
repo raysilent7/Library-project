@@ -21,16 +21,16 @@ public class BookService {
         return dao.findByAny(obj);
     }
 
-    public void save (Book obj) {
-        if (obj.getIsbn() == null) {
-            throw new DbIntegrityException("ISBN can't be null");
+    public void saveOrUpdate (Book obj) {
+        if (obj.getId() == null) {
+            dao.insert(obj);
         }
         else {
-            dao.insert(obj);
+            dao.update(obj);
         }
     }
 
     public void remove (Book obj) {
-        dao.deleteByIsbn(obj.getIsbn());
+        dao.deleteById(obj.getId());
     }
 }
