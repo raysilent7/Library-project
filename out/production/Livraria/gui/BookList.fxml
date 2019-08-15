@@ -25,13 +25,13 @@
         <columns>
             <TableColumn fx:id="tableColumnEdit" prefWidth="32.0" />
             <TableColumn fx:id="tableColumnRemove" prefWidth="32.0" />
+            <TableColumn fx:id="tableColumnImgPath" prefWidth="52.0" text="Cape" />
             <TableColumn fx:id="tableColumnId" prefWidth="35.0" text="Id" />
           <TableColumn fx:id="tableColumnIsbn" prefWidth="70.0" text="ISBN" />
           <TableColumn fx:id="tableColumnName" prefWidth="170.0" text="Name" />
             <TableColumn fx:id="tableColumnAutor" prefWidth="150.0" text="Autor" />
             <TableColumn fx:id="tableColumnPrice" prefWidth="65.0" text="Price" />
             <TableColumn fx:id="tableColumnReleaseDt" prefWidth="90.0" text="Release Dt." />
-            <TableColumn fx:id="tableColumnImgPath" prefWidth="70.0" text="Cape" />
         </columns>
       </TableView>
    </children>
