@@ -38,6 +38,8 @@ public class Utils {
 
     public static Date tryParseToUtilDate (String date) {
         try {
+            TimeZone timeZone = TimeZone.getTimeZone("UTC-03:00");
+            TimeZone.setDefault(timeZone);
             Date utilDate = sdf.parse(date);
             return utilDate;
         } catch (ParseException e) {
@@ -46,7 +48,7 @@ public class Utils {
     }
 
     public static java.sql.Date tryParseToSqlDate (Date date) {
-        TimeZone timeZone = TimeZone.getTimeZone("America/Los_Angeles");
+        TimeZone timeZone = TimeZone.getTimeZone("UTC-03:00");
         TimeZone.setDefault(timeZone);
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
         return sqlDate;
