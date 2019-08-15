@@ -57,7 +57,7 @@ public class BookListController implements Initializable, DataChangeListener {
     private TableColumn<Book, Date> tableColumnReleaseDt;
 
     @FXML
-    private TableColumn<Book, Path> tableColumnImgPath;
+    private TableColumn<Book, Book> tableColumnImgPath;
 
     @FXML
     private TableColumn<Book, Book> tableColumnEdit;
@@ -107,6 +107,7 @@ public class BookListController implements Initializable, DataChangeListener {
         tableViewBook.setItems(obsList);
         initEditButtons();
         initRemoveButtons();
+        initImageButtons();
     }
 
     @Override
@@ -135,7 +136,6 @@ public class BookListController implements Initializable, DataChangeListener {
         tableColumnAutor.setCellValueFactory(new PropertyValueFactory<>("autorName"));
         tableColumnPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         tableColumnReleaseDt.setCellValueFactory(new PropertyValueFactory<>("releaseDt"));
-        tableColumnImgPath.setCellValueFactory(new PropertyValueFactory<>("imgPath"));
 
         tableColumnReleaseDt.setCellFactory(column -> {
             TableCell<Book, Date> cell = new TableCell<>() {
@@ -169,7 +169,7 @@ public class BookListController implements Initializable, DataChangeListener {
             initializingAction.accept(controller);
 
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Enter data");
+            dialogStage.setTitle("Book Management");
             dialogStage.setScene(new Scene(pane));
             dialogStage.setResizable(false);
             dialogStage.initOwner(parentStage);
@@ -217,6 +217,28 @@ public class BookListController implements Initializable, DataChangeListener {
                 }
                 setGraphic(button);
                 button.setOnAction(event -> removeEntity(obj));
+            }
+        });
+    }
+
+    private void initImageButtons() {
+        tableColumnImgPath.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        tableColumnImgPath.setCellFactory(param -> new TableCell<>() {
+            private final Button button = new Button("IMG");
+
+            @Override
+            protected void updateItem(Book obj, boolean empty) {
+                super.updateItem(obj, empty);
+                if (obj == null) {
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(button);
+                button.setOnAction(
+                        event -> createDialogForm("/gui/ImgLoader.fxml", Utils.currentStage(event), (ImgLoaderController controller) -> {
+                            controller.setBook(obj);
+                            controller.loadImage();
+                        }));
             }
         });
     }
