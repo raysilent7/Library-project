@@ -5,10 +5,14 @@ import javafx.scene.Node;
 import javafx.stage.Stage;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Utils {
+
+    private static DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public static Stage currentStage (ActionEvent event) {
         return (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -32,18 +36,19 @@ public class Utils {
         }
     }
 
-    public static String testFieldEmpty (String str) {
-        if (str == null || str.trim().equals("")) {
-            return str;
-        }
-        else {
+    public static Date tryParseToUtilDate (String date) {
+        try {
+            Date utilDate = sdf.parse(date);
+            return utilDate;
+        } catch (ParseException e) {
             return null;
         }
     }
 
-    private static String formatData(Date data) {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String newDate = dateFormat.format(data);
-        return newDate;
+    public static java.sql.Date tryParseToSqlDate (Date date) {
+        TimeZone timeZone = TimeZone.getTimeZone("America/Los_Angeles");
+        TimeZone.setDefault(timeZone);
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        return sqlDate;
     }
 }

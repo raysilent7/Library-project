@@ -24,7 +24,7 @@ import services.BookService;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
@@ -138,17 +138,16 @@ public class BookListController implements Initializable, DataChangeListener {
         tableColumnImgPath.setCellValueFactory(new PropertyValueFactory<>("imgPath"));
 
         tableColumnReleaseDt.setCellFactory(column -> {
-            TableCell<Book, Date> cell = new TableCell<Book, Date>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            TableCell<Book, Date> cell = new TableCell<>() {
+                private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
                 @Override
                 protected void updateItem(Date item, boolean empty) {
                     super.updateItem(item, empty);
-                    if(empty) {
+                    if (empty) {
                         setText(null);
-                    }
-                    else {
-                        this.setText(format.format(item));
+                    } else {
+                        this.setText(sdf.format(item));
 
                     }
                 }

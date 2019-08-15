@@ -18,7 +18,7 @@ import javafx.scene.control.TextField;
 import services.BookService;
 
 import java.net.URL;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -118,9 +118,8 @@ public class BookFilterController implements Initializable {
             obj.setPrice(Utils.tryParseToDouble(txtFilterField.getText()));
             return obj;
         } else if (filterOptionsComboBox.getValue().equals("Release Date")) {
-            obj.setReleaseDt(new Date(Date.parse(txtFilterField.getText())));
-            //return obj;
-            System.out.println(obj);
+            obj.setReleaseDt(Utils.tryParseToUtilDate(txtFilterField.getText()));
+            return obj;
         }else if (filterOptionsComboBox.getValue().equals("Image")) {
             obj.setName(txtFilterField.getText());
             return obj;

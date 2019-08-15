@@ -1,7 +1,7 @@
 package entities;
 
 import java.nio.file.Path;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Objects;
 
 public class Book {

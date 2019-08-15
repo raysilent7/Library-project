@@ -5,6 +5,7 @@ import db.DB;
 import db.DbException;
 import db.DbIntegrityException;
 import entities.Book;
+import gui.util.Utils;
 
 import java.nio.file.Path;
 import java.sql.*;
@@ -29,7 +30,7 @@ public class BookDaoJdbc implements BookDao {
             st.setString(2, book.getName());
             st.setString(3, book.getAutorName());
             st.setDouble(4, book.getPrice());
-            st.setDate(5, book.getReleaseDt());
+            st.setDate(5, Utils.tryParseToSqlDate(book.getReleaseDt()));
             st.setString(6, String.valueOf(book.getImgPath()));
 
             int rowsAffected = st.executeUpdate();
@@ -65,7 +66,7 @@ public class BookDaoJdbc implements BookDao {
             st.setString(2, book.getName());
             st.setString(3, book.getAutorName());
             st.setDouble(4, book.getPrice());
-            st.setDate(5, book.getReleaseDt());
+            st.setDate(5, Utils.tryParseToSqlDate(book.getReleaseDt()));
             st.setString(6, String.valueOf(book.getImgPath()));
             st.setInt(7, book.getId());
 
@@ -132,7 +133,7 @@ public class BookDaoJdbc implements BookDao {
             st.setString(3, book.getName());
             st.setString(4, book.getAutorName());
             st.setDouble(5, book.getPrice());
-            st.setDate(6, book.getReleaseDt());
+            st.setDate(6, Utils.tryParseToSqlDate(book.getReleaseDt()));
             st.setString(7, String.valueOf(book.getImgPath()));
 
             rs = st.executeQuery();

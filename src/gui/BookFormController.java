@@ -18,7 +18,6 @@ import services.BookService;
 
 import java.net.URL;
 import java.nio.file.Path;
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,9 +82,6 @@ public class BookFormController implements Initializable {
         catch (ValidationException e) {
             setErrorMessages(e.getErrors());
         }
-        catch (ParseException e) {
-            Alerts.showAlert("Error saving object", null, e.getMessage(), Alert.AlertType.ERROR);
-        }
     }
 
     @FXML
@@ -115,7 +111,7 @@ public class BookFormController implements Initializable {
         txtImgPath.setText(String.valueOf(entity.getImgPath()));
     }
 
-    private Book getFormData() throws ParseException {
+    private Book getFormData() {
         Book obj = new Book ();
         ValidationException exception = new ValidationException("Validation error");
 
@@ -133,7 +129,7 @@ public class BookFormController implements Initializable {
         obj.setAutorName(txtAutor.getText());
 
         obj.setPrice(Utils.tryParseToDouble(txtPrice.getText()));
-        obj.setReleaseDt(new Date(Date.parse(txtReleaseDt.getText())));
+        obj.setReleaseDt(Utils.tryParseToUtilDate(txtReleaseDt.getText()));
         obj.setImgPath(Path.of(txtImgPath.getText()));
 
         if (exception.getErrors().size() > 0) {
